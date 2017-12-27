@@ -1,0 +1,9 @@
+{
+  "redshift": {
+    "database": "bitcoin",
+    "host": "localhost",
+    "password": "deepesh",
+    "port": 5432,
+    "user": "lakshmanadeepesh"
+  }
+}
