@@ -1,13 +1,15 @@
+#!/usr/bin/python
 import json
 import requests as re
 from datetime import datetime
 import psycopg2 as con
 
 
+
 if __name__ == '__main__':
 	url = 'https://blockchain.info/ticker'
 	headers = {'User-agent':'Mozilla 5.0'}
-	creds = json.load(open('config.json'))
+	creds = json.load(open('/Users/lakshmanadeepesh/Desktop/bitcoin_predictor/config.json'))
 
 	resp = re.get(url,headers=headers)
 	data = json.loads(resp.text)
