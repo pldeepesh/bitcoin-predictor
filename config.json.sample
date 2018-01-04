@@ -1,0 +1,16 @@
+{
+  "email_creds": {
+    "email": "xxxx.xxxx@gmail.com",
+    "password": "xxxx",
+    "sender_list": [
+      "xxxxx@xx.com"
+    ]
+  },
+  "redshift": {
+    "database": "xx",
+    "host": "xx",
+    "password": "xx",
+    "port": 1234,
+    "user": "xx"
+  }
+}
