@@ -1,4 +1,11 @@
 {
+  "email_creds": {
+    "email": "jarvis.newsteller@gmail.com",
+    "password": "jarvis123",
+    "sender_list": [
+      "pldeepesh@gmail.com"
+    ]
+  },
   "redshift": {
     "database": "bitcoin",
     "host": "localhost",
