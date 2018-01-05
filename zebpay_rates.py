@@ -39,7 +39,7 @@ if __name__ == '__main__':
 	sell = cursor.fetchall()
 	conn.commit()
 	if response['sell']>sell[0][0] :
-		sendmail("sell - highest till now")
+		sendmail("sell - highest - "+str(response['sell']))
 		cursor.execute('insert into email_sent(timestamp,subject) values(now(),%s);','Sell')
 		conn.commit()
 	elif response['sell']<sell[0][0]:
@@ -50,11 +50,19 @@ if __name__ == '__main__':
 	conn.commit()
 	buy = cursor.fetchall()
 	if response['buy']<buy[0][0]:
-		sendmail('Buy')
+		sendmail('Buy rate lowest - '+str(response['buy']))
 		cursor.execute('insert into email_sent(timestamp,subject) values(now(),%s);','Buy')
 		conn.commit()
 	elif response['buy']>buy[0][0]:
 		pass
+
+	# other logics
+	cursor.execute('select min(buy-sell) from zebpay_rates;')
+	buy_sell_difference = cursor.fetchall()
+	conn.commit()
+	if response['buy']-response['sell'] < buy_sell_difference[0][0]:
+		send_mail('plausible - difference is '+str(response['buy']-response['sell']))
+
 
 	# ending the database connection
 	conn.close()
