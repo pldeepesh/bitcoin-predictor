@@ -28,10 +28,6 @@ if __name__ == '__main__':
 	#getting data from the API endpoint
 	response = re.get(url,headers=headers)
 	response = json.loads(response.text)
-
-	cursor.execute("insert into zebpay_rates(date,price,buy,sell) values(now(),%s,%s,%s);",(response['market'],response['buy'],response['sell']))
-	conn.commit()
-
 	# All the logics and communication happens through this part of the code
 
 	# selling prices
@@ -39,8 +35,8 @@ if __name__ == '__main__':
 	sell = cursor.fetchall()
 	conn.commit()
 	if response['sell']>sell[0][0] :
-		sendmail("sell - highest - "+str(response['sell']))
-		cursor.execute('insert into email_sent(timestamp,subject) values(now(),%s);','Sell')
+		send_mail("sell - highest - "+str(response['sell']))
+		cursor.execute("insert into email_sent(timestamp,subject) values(now(),%s);",('sell',))
 		conn.commit()
 	elif response['sell']<sell[0][0]:
 		pass
@@ -50,8 +46,8 @@ if __name__ == '__main__':
 	conn.commit()
 	buy = cursor.fetchall()
 	if response['buy']<buy[0][0]:
-		sendmail('Buy rate lowest - '+str(response['buy']))
-		cursor.execute('insert into email_sent(timestamp,subject) values(now(),%s);','Buy')
+		send_mail('Buy rate lowest - '+str(response['buy']))
+		cursor.execute("insert into email_sent(timestamp,subject) values(now(),%s);",('Buy',))
 		conn.commit()
 	elif response['buy']>buy[0][0]:
 		pass
@@ -62,8 +58,12 @@ if __name__ == '__main__':
 	conn.commit()
 	if response['buy']-response['sell'] < buy_sell_difference[0][0]:
 		send_mail('plausible - difference is '+str(response['buy']-response['sell']))
+		cursor.execute('insert into email_sent(timestamp,subject) values(now(),%s);',('difference',))
+		conn.commit()
 
-
+	# pushing the values to the db before closing the connection
+	cursor.execute("insert into zebpay_rates(date,price,buy,sell) values(now(),%s,%s,%s);",(response['market'],response['buy'],response['sell']))
+	conn.commit()
 	# ending the database connection
 	conn.close()
 
